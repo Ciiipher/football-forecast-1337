@@ -1,0 +1,47 @@
+<script>
+
+    $('#register-button').click(function() {
+
+        var name = $('#name').val();
+        var email = $('#user_email').val();
+        var password = $('#password').val();
+
+        var register_button = $('#register-button-message');
+        register_button.html('');
+
+        var register_button_icon = $('#register-button-icon');
+        register_button_icon.removeClass('fa-arrow-right').addClass('fa fa-circle-o-notch fa-spin');
+
+        $.ajax({
+            type: "POST",
+            url: "/register",
+            data: {
+                name: name,
+                email: email,
+                password: password
+            },
+            success: function(response) {
+
+                $('.modal-body').html(response['html']);
+
+            },
+            error: function(response) {
+
+                var ajax_errors = $('#ajax-errors');
+                var title = response.responseJSON['title'];
+                var message = response.responseJSON['message'];
+
+                ajax_errors.css('display', 'block');
+                ajax_errors.find('strong').html(title);
+                ajax_errors.find('span').html(message);
+            },
+            complete: function() {
+                register_button.html('Register');
+                register_button_icon.removeClass('fa fa-circle-o-notch fa-spin').addClass('fa fa-arrow-right');
+            }
+
+        })
+
+    })
+
+</script>
